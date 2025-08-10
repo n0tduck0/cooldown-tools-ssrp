@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cooldown Tools</title>
+    <style>
+        body {
+            background-color: #1e1e1e;
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 0;
+            margin: 0;
+        }
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background-color: #2c2c2c;
+        }
+        h1 {
+            margin: 0;
+            font-size: 2.5em;
+        }
+        main {
+            margin-top: 40px;
+        }
+        select, input, button {
+            padding: 12px;
+            margin: 10px;
+            font-size: 1.1em;
+            border-radius: 5px;
+            border: none;
+        }
+        select, input {
+            background-color: #333;
+            color: white;
+        }
+        button {
+            background-color: #444;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #666;
+        }
+        .result {
+            margin-top: 30px;
+            font-size: 1.5em;
+            color: #ffcc00;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+        .result.show {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Cooldown Tools</h1>
+</header>
+
+<main>
+    <select id="scpSelect">
+        <option value="610">SCP 610</option>
+        <option value="0762">SCP 076-2</option>
+        <option value="riot">Class-D Riot</option>
+    </select>
+    <input type="number" id="percentage" placeholder="Enter % shown on screen" min="0" max="100">
+    <button onclick="calculateCooldown()">Calculate</button>
+
+    <div class="result" id="result"></div>
+</main>
+
+<script>
+function calculateCooldown() {
+    let scp = document.getElementById("scpSelect").value;
+    let percent = document.getElementById("percentage").value;
+    let resultDiv = document.getElementById("result");
+
+    if (percent === "" || isNaN(percent) || percent < 0 || percent > 100) {
+        resultDiv.textContent = "Please enter a valid percentage between 0 and 100.";
+        resultDiv.classList.add("show");
+        return;
+    }
+
+    let multiplier;
+    let message;
+
+    if (scp === "610") {
+        multiplier = 2.4;
+        message = "SCP 610 CAN BE BREACHED IN:";
+    } else if (scp === "0762") {
+        multiplier = 1.2;
+        message = "SCP 076-2 CAN BECOME ACTIVE IN:";
+    } else if (scp === "riot") {
+        multiplier = 0.3;
+        message = "A RIOT CAN BE CAUSED IN:";
+    }
+
+    // Formula: (100 - percent) * multiplier
+    let timeInHours = (100 - parseFloat(percent)) * multiplier / 100;
+    let hours = Math.floor(timeInHours);
+    let minutes = Math.round((timeInHours - hours) * 60);
+
+    resultDiv.textContent = `${message} ${hours}h ${minutes}m`;
+    resultDiv.classList.add("show");
+}
+</script>
+
+</body>
+</html>
